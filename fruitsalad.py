@@ -282,8 +282,18 @@ class FruitSaladTool():
                         loaded_line, "attr.command.aggregate")
                     self._obfuscate_namespace(
                         loaded_line, "attr.command.find")
-                    self._obfuscate_namespace(
-                        loaded_line, "attr.command.update")
+
+                    if loaded_line.get('attr', {}).get('command', {}).get('findAndModify', None) is not None:
+                        self._obfuscate_namespace(
+                            loaded_line, "attr.command.findAndModify")
+                        # attr.command.update in findAndModify is a dict
+                        self._obfuscate_command(
+                            loaded_line, "attr.command.update")
+                    else:
+                        # attr.command.update outside of findAndModify is a string
+                        self._obfuscate_namespace(
+                            loaded_line, "attr.command.update")
+
                     self._obfuscate_namespace(
                         loaded_line, "attr.command.insert")
                     self._obfuscate_namespace(
